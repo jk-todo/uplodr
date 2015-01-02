@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var formidable = require('formidable'),
     http = require('http'),
     util = require('util');
