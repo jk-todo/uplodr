@@ -1,5 +1,5 @@
 module.exports = {
-//customUploadDir: "/tmp/my/path",
+//customUploadDir: "/tmp/my_path",
 subfolders: [
 
 'alice',
