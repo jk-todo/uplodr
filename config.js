@@ -1,4 +1,4 @@
-moduel.exports = {
+module.exports = {
 //customUploadDir: "/tmp/my/path",
 subfolders: [
 
