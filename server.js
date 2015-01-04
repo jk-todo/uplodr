@@ -5,7 +5,10 @@ var formidable = require('formidable'),
     util = require('util'),
     os = require('os'),
     fs = require('fs'),
-    uploadDir = os.tmpDir() + "/uplodr";
+    uploadDir = os.tmpDir() + "/uplodr",
+    config = require('./config.js');
+
+if (typeof config.customUploadDir !== 'undefined') uploadDir = config.customUploadDir;
 
 mkdirIfNotExist(uploadDir);
 
