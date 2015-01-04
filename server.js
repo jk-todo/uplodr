@@ -34,16 +34,10 @@ http.createServer(function(req, res) {
 }).listen(80);
 
 function mkdirIfNotExist(dir) {
-  fs.exists(dir, function(exists) {
-    if (!exists) {
-      fs.mkdirSync(dir);
-    }
-  });
-  fs.exists(dir, function(exists) {
-    if (!exists) {
-      return false;
-    } else {
-      return fs.statSync(dir).isDirectory();
-    }
-  });
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+  if (!fs.existsSync(dir)) {
+    return false;
+  } else {
+    return fs.statSync(dir).isDirectory();
+  }
 }
