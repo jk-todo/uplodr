@@ -23,6 +23,7 @@ http.createServer(function(req, res) {
     var form = new formidable.IncomingForm();
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
+      // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload:\n\n');
       res.end(util.inspect({fields: fields, files: files}));
@@ -35,7 +36,7 @@ http.createServer(function(req, res) {
   res.end(
     '<form action="/upload" enctype="multipart/form-data" method="post">'+
     '<input type="text" name="title"><br>'+
-    '<input type="file" name="upload" multiple="multiple"><br>'+
+    '<input type="file" name="upload"><br>'+
     '<input type="submit" value="Upload">'+
     '</form>'
   );
