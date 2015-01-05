@@ -33,7 +33,7 @@ http.createServer(function(req, res) {
           if (files.upload.name.lastIndexOf('.') > 0) {
             var parts = files.upload.name.split('.');
             var extension = parts.pop();
-            if (extension.join().length() > 0) { 
+            if (String(extension).length() > 0) { 
               var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') + '.' + extension;
             } else {
               var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'');
