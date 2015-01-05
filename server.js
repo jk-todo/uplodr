@@ -33,7 +33,7 @@ http.createServer(function(req, res) {
           if (files.upload.name.lastIndexOf('.') > 0) {
             var parts = files.upload.name.split('.');
             var extension = parts[parts.length - 1];
-            var safename = newUploadDir + '/' + files.upload.name.match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') + extension;
+            var safename = newUploadDir + '/' + files.upload.name.match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') + '.' + extension;
             fs.rename(files.upload.path, safename, function(err){
               if (err) throw err;
             });
