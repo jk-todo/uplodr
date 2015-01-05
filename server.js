@@ -23,10 +23,20 @@ http.createServer(function(req, res) {
     var form = new formidable.IncomingForm();
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
+      if (typeof files.upload !== 'undefined')
+        if (files.upload.size !== 0) {
+          // metafile, files.upload, "upload" is the name of the input field
+          var metafile = files.upload.path + '.txt';
+          fs.appendFile(metafile, util.inspect({fields: fields, files: files}), function(err){
+            if (err) throw err;
+          });
+        }
+      }
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
-      res.write('received upload:\n\n');
-      res.end(util.inspect({fields: fields, files: files}));
+      res.write('received upload.\n\n');
+      // res.end(util.inspect({fields: fields, files: files}));
+      res.end();
     });
     return;
   }
