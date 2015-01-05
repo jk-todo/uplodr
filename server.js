@@ -17,9 +17,11 @@ http.createServer(function(req, res) {
     // current date/time of session
     var date = new Date();
     var dateString = '' + date.getFullYear() + date.getMonth() + date.getDate() + '-' + date.getHours() + date.getMinutes() + date.getSeconds() + '-' + date.getTimezoneOffset();
+    var newUploadDir = uploadDir + '/' + dateString;
+    mkdirIfNotExist(newUploadDir);
     // parse a file upload
     var form = new formidable.IncomingForm();
-    form.uploadDir = uploadDir + '/' + dateString;
+    form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload:\n\n');
