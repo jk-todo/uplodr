@@ -23,7 +23,7 @@ http.createServer(function(req, res) {
     var form = new formidable.IncomingForm();
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
-      if (typeof files.upload !== 'undefined')
+      if (typeof files.upload !== 'undefined') {
         if (files.upload.size !== 0) {
           // metafile, files.upload, "upload" is the name of the input field
           var metafile = files.upload.path + '.txt';
