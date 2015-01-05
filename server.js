@@ -16,7 +16,7 @@ http.createServer(function(req, res) {
   if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
     // current date/time of session
     var date = new Date();
-    var dateString = '' + date.getFullYear() + date.getMonth() + date.getDate() + '-' + date.getHours() + date.getMinutes() + date.getSeconds() + '-' + date.getTimezoneOffset();
+    var dateString = '' + date.getFullYear() + twoDigits(date.getMonth()+1) + twoDigits(date.getDate()) + '-' + twoDigits(date.getHours()) + twoDigits(date.getMinutes()) + twoDigits(date.getSeconds()) + '-' + date.getTimezoneOffset();
     var newUploadDir = uploadDir + '/' + dateString;
     mkdirIfNotExist(newUploadDir);
     // parse a file upload
@@ -58,5 +58,13 @@ function mkdirIfNotExist(dir) {
     return false;
   } else {
     return fs.statSync(dir).isDirectory();
+  }
+}
+
+function twoDigits(num) {
+  if (Number(num) < 10) {
+    return '0' + Number(num);
+  } else {
+    return num;
   }
 }
