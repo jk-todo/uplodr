@@ -14,9 +14,12 @@ mkdirIfNotExist(uploadDir);
 
 http.createServer(function(req, res) {
   if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
+    // current date/time of session
+    var date = new Date();
+    var dateString = '' + date.getFullYear() + date.getMonth() + date.getDate() + '-' + date.getHours() + date.getMinutes() + date.getSeconds() + '-' + date.getTimezoneOffset();
     // parse a file upload
     var form = new formidable.IncomingForm();
-    form.uploadDir = uploadDir;
+    form.uploadDir = uploadDir + '/' + dateString;
     form.parse(req, function(err, fields, files) {
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload:\n\n');
