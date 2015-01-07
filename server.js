@@ -5,6 +5,7 @@ var formidable = require('formidable'),
     util = require('util'),
     os = require('os'),
     fs = require('fs'),
+    crypto = require('crypto'),
     uploadDir = os.tmpDir() + "/uplodr",
     config = require('./config.js');
 
@@ -17,7 +18,7 @@ http.createServer(function(req, res) {
     // current date/time of session
     var date = new Date();
     var dateString = '' + date.getFullYear() + twoDigits(date.getMonth()+1) + twoDigits(date.getDate()) + '-' + twoDigits(date.getHours()) + twoDigits(date.getMinutes()) + twoDigits(date.getSeconds()) + '-' + date.getTimezoneOffset();
-    var newUploadDir = uploadDir + '/' + dateString;
+    var newUploadDir = uploadDir + '/' + dateString + '-' + randomCharacters(5);
     mkdirIfNotExist(newUploadDir);
     // parse a file upload
     var form = new formidable.IncomingForm();
@@ -79,4 +80,14 @@ function twoDigits(num) {
   } else {
     return num;
   }
+}
+
+function randomCharacters (count, characters) {
+  characters = characters || "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var result = new Array(count),
+      randomByte = crypto.randomBytes(count);
+  for (var i = 0; i < count; i++) {
+    result[i] = characters[randomByte[i] % characters.length]
+  };
+  return result.join('');
 }
