@@ -43,16 +43,17 @@ http.createServer(function(req, res) {
       );
       console.log('uplodr: new %s', metafile);
       // files.upload, "upload" is the name of the input field
-      processUpload(files.upload);
-      processUpload(files.upload2);
-      processUpload(files.upload3);
-      processUpload(files.upload4);
-      processUpload(files.upload5);
+      var successList = new Array();
+      successList.push(processUpload(files.upload));
+      successList.push(processUpload(files.upload2));
+      successList.push(processUpload(files.upload3));
+      successList.push(processUpload(files.upload4));
+      successList.push(processUpload(files.upload5));
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
-      res.write('received upload.\n\n');
+      res.write('received upload:\n\n');
       // res.end(util.inspect({fields: fields, files: files}));
-      res.end();
+      res.end(successList.join(','));
     });
     return;
   }
@@ -117,8 +118,10 @@ function processUpload(inputName) {
         fs.rename(inputName.path, safename, function(err){
           if (err) throw err;
         });
+        return safename.split('/').pop().join('');
+      } else {
+        return inputName.name;
       }
-      return true;
     } else {
       if (fs.existsSync(inputName.path)) {
         if (fs.statSync(inputName.path).isFile()) {
@@ -129,5 +132,5 @@ function processUpload(inputName) {
       }
     }
   }
-  return false;
+  return '';
 }
