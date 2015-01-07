@@ -34,7 +34,7 @@ http.createServer(function(req, res) {
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
       // metadata
-      var metafile = newUploadDir + '/metadata.txt';
+      var metafile = newUploadDir + '/metadata-' + randomCharacters(5) + '.txt';
       fs.appendFile(metafile,
         util.inspect({fields: fields, files: files}),
         function(err){
@@ -112,11 +112,11 @@ function processUpload(inputName) {
         // console.log('uplodr: newUploadDir %s', newUploadDir);
         if (String(extension).length > 0) { 
           var safename = newUploadDir + '/'
-            + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'')
+            + parts.join().match(/[a-zA-Z0-9]+/g).join('')
             + '.' + extension;
         } else {
           var safename = newUploadDir + '/'
-            + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'');
+            + parts.join().match(/[a-zA-Z0-9]+/g).join('');
         }
         fs.rename(inputName.path, safename, function(err){
           if (err) throw err;
