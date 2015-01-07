@@ -34,7 +34,7 @@ http.createServer(function(req, res) {
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
       // metadata
-      var metafile = newUploadDir + 'metadata.txt';
+      var metafile = newUploadDir + '/metadata.txt';
       fs.appendFile(metafile,
         util.inspect({fields: fields, files: files}),
         function(err){
