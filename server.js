@@ -119,6 +119,14 @@ function processUpload(inputName) {
         });
       }
       return true;
+    } else {
+      if (fs.existsSync(inputName.path)) {
+        if (fs.statSync(inputName.path).isFile()) {
+          fs.unlink(inputName.path, function(err){
+            if (err) throw err;
+          });
+        }
+      }
     }
   }
   return false;
