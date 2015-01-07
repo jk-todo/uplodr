@@ -9,7 +9,8 @@ var formidable = require('formidable'),
     uploadDir = os.tmpDir() + "/uplodr",
     config = require('./config.js');
 
-if (typeof config.customUploadDir !== 'undefined') uploadDir = config.customUploadDir;
+if (typeof config.customUploadDir !== 'undefined') \
+  uploadDir = config.customUploadDir;
 
 mkdirIfNotExist(uploadDir);
 
@@ -17,19 +18,35 @@ http.createServer(function(req, res) {
   if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
     // current date/time of session, use UTC to avoid DST
     var date = new Date();
-    var dateString = '' + date.getUTCFullYear() + twoDigits(date.getUTCMonth()+1) + twoDigits(date.getUTCDate()) + '-' + twoDigits(date.getUTCHours()) + twoDigits(date.getUTCMinutes()) + twoDigits(date.getUTCSeconds());
-    var newUploadDir = uploadDir + '/' + dateString + '-' + randomCharacters(5);
+    var dateString = '' + date.getUTCFullYear() \
+              + twoDigits(date.getUTCMonth()+1) \
+              + twoDigits(date.getUTCDate()) \
+              + '-' \
+              + twoDigits(date.getUTCHours()) \
+              + twoDigits(date.getUTCMinutes()) \
+              + twoDigits(date.getUTCSeconds());
+    var newUploadDir = uploadDir \
+                     + '/' + dateString \
+                     + '-' + randomCharacters(5);
     mkdirIfNotExist(newUploadDir);
     // parse a file upload
     var form = new formidable.IncomingForm();
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
-      var metadata = util.inspect({fields: fields, files: files});
-      processUpload(files.upload, metadata);
-      processUpload(files.upload2, metadata);
-      processUpload(files.upload3, metadata);
-      processUpload(files.upload4, metadata);
-      processUpload(files.upload5, metadata);
+      // metadata
+      fs.appendFile(newUploadDir + 'metadata.txt',
+        util.inspect({fields: fields, files: files}),
+        function(err){
+          if (err) throw err;
+        }
+      );
+      console.log('uplodr: new %s', metafile);
+      // files.upload, "upload" is the name of the input field
+      processUpload(files.upload);
+      processUpload(files.upload2);
+      processUpload(files.upload3);
+      processUpload(files.upload4);
+      processUpload(files.upload5);
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload.\n\n');
@@ -72,7 +89,8 @@ function twoDigits(num) {
 }
 
 function randomCharacters (count, characters) {
-  characters = characters || "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  characters = characters \
+    || "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   var result = new Array(count),
       randomByte = crypto.randomBytes(count);
   for (var i = 0; i < count; i++) {
@@ -81,24 +99,21 @@ function randomCharacters (count, characters) {
   return result.join('');
 }
 
-function processUpload(inputName, metadata) {
+function processUpload(inputName) {
   if (typeof inputName !== 'undefined') {
     if (inputName.size !== 0) {
-      // metafile, files.upload, "upload" is the name of the input field
-      var metafile = inputName.path + '.txt';
-      fs.appendFile(metafile, metadata, function(err){
-        if (err) throw err;
-      });
-      console.log('uplodr: new %s', metafile);
       if (inputName.name.lastIndexOf('.') > 0) {
         var parts = inputName.name.split('.');
         var extension = parts.pop();
         var newUploadDir = inputName.name.split('/');
         newUploadDir.pop();
         if (String(extension).length > 0) { 
-          var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') + '.' + extension;
+          var safename = newUploadDir + '/' \
+            + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') \
+            + '.' + extension;
         } else {
-          var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'');
+          var safename = newUploadDir + '/' \
+            + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'');
         }
         fs.rename(inputName.path, safename, function(err){
           if (err) throw err;
