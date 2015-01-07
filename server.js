@@ -106,7 +106,7 @@ function processUpload(inputName) {
       if (inputName.name.lastIndexOf('.') > 0) {
         var parts = inputName.name.split('.');
         var extension = parts.pop();
-        var newUploadDir = inputName.name.split('/');
+        var newUploadDir = inputName.path.split('/');
         newUploadDir.pop();
         if (String(extension).length > 0) { 
           var safename = newUploadDir + '/'
