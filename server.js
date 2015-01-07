@@ -58,18 +58,14 @@ http.createServer(function(req, res) {
   }
 
   // show a file upload form
-  res.writeHead(200, {'content-type': 'text/html'});
-  res.end(
-    '<form action="/upload" enctype="multipart/form-data" method="post">'+
-    '<input type="text" name="title"><br>'+
-    '<input type="file" name="upload"><br>'+
-    '<input type="file" name="upload2"><br>'+
-    '<input type="file" name="upload3"><br>'+
-    '<input type="file" name="upload4"><br>'+
-    '<input type="file" name="upload5"><br>'+
-    '<input type="submit" value="Upload">'+
-    '</form>'
-  );
+  fs.readFile('./views/index.html', function(error, content) {
+    if (error) {
+      self.serverError(404, '404 Bad Request');
+    } else {
+      res.writeHead(200, {'content-type': 'text/html'});
+      res.end(content, 'utf-8');
+    }
+  });
 }).listen(80);
 
 function mkdirIfNotExist(dir) {
