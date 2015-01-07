@@ -108,8 +108,8 @@ function processUpload(inputName) {
         var extension = parts.pop();
         var path = inputName.path.split('/');
         path.pop();
-        var newUploadDir = '/' + path.join('/');
-        console.log('uplodr: newUploadDir %s', newUploadDir);
+        var newUploadDir = path.join('/');
+        // console.log('uplodr: newUploadDir %s', newUploadDir);
         if (String(extension).length > 0) { 
           var safename = newUploadDir + '/'
             + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'')
