@@ -15,7 +15,7 @@ mkdirIfNotExist(uploadDir);
 
 http.createServer(function(req, res) {
   if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
-    // current date/time of session, use UTC because avoid DST
+    // current date/time of session, use UTC to avoid DST
     var date = new Date();
     var dateString = '' + date.getUTCFullYear() + twoDigits(date.getUTCMonth()+1) + twoDigits(date.getUTCDate()) + '-' + twoDigits(date.getUTCHours()) + twoDigits(date.getUTCMinutes()) + twoDigits(date.getUTCSeconds());
     var newUploadDir = uploadDir + '/' + dateString + '-' + randomCharacters(5);
