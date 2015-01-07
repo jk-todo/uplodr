@@ -41,7 +41,7 @@ http.createServer(function(req, res) {
           if (err) throw err;
         }
       );
-      console.log('uplodr: new %s', metafile);
+      console.log('uplodr: [%s] new %s', dateString, metafile);
       // files.upload, "upload" is the name of the input field
       processUpload(files.upload);
       processUpload(files.upload2);
