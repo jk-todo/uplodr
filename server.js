@@ -15,9 +15,9 @@ mkdirIfNotExist(uploadDir);
 
 http.createServer(function(req, res) {
   if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
-    // current date/time of session
+    // current date/time of session, use UTC because avoid DST
     var date = new Date();
-    var dateString = '' + date.getFullYear() + twoDigits(date.getMonth()+1) + twoDigits(date.getDate()) + '-' + twoDigits(date.getHours()) + twoDigits(date.getMinutes()) + twoDigits(date.getSeconds()) + '-' + date.getTimezoneOffset();
+    var dateString = '' + date.getUTCFullYear() + twoDigits(date.getUTCMonth()+1) + twoDigits(date.getUTCDate()) + '-' + twoDigits(date.getUTCHours()) + twoDigits(date.getUTCMinutes()) + twoDigits(date.getUTCSeconds());
     var newUploadDir = uploadDir + '/' + dateString + '-' + randomCharacters(5);
     mkdirIfNotExist(newUploadDir);
     // parse a file upload
@@ -31,6 +31,7 @@ http.createServer(function(req, res) {
           fs.appendFile(metafile, util.inspect({fields: fields, files: files}), function(err){
             if (err) throw err;
           });
+          console.log('uplodr: new %s', metafile);
           if (files.upload.name.lastIndexOf('.') > 0) {
             var parts = files.upload.name.split('.');
             var extension = parts.pop();
