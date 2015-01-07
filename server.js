@@ -49,18 +49,11 @@ http.createServer(function(req, res) {
       originalList.push(processUpload(files.upload3));
       originalList.push(processUpload(files.upload4));
       originalList.push(processUpload(files.upload5));
-      var successList = new Array();
-      for (var i = 0; i < originalList.length; i++) {
-        if (originalList[i].length > 0) {
-          successList.push(originalList[i]);
-          // console.log(originalList[i]);
-        }
-      }
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload:\n\n');
       // res.end(util.inspect({fields: fields, files: files}));
-      res.end(successList.join());
+      res.end(cleanStringArray(originalList).join("\n"));
     });
     return;
   }
@@ -75,6 +68,17 @@ http.createServer(function(req, res) {
     }
   });
 }).listen(80);
+
+function cleanStringArray(orig) {
+  var result = new Array();
+  for (var i = 0; i < orig.length; i++) {
+    if (orig[i].length > 0) {
+      result.push(orig[i]);
+      // console.log(orig[i]);
+    }
+  }
+  return result;
+}
 
 function mkdirIfNotExist(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir);
