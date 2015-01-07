@@ -118,7 +118,7 @@ function processUpload(inputName) {
         fs.rename(inputName.path, safename, function(err){
           if (err) throw err;
         });
-        return safename.split('/').pop().join('');
+        return safename.split('/').pop();
       } else {
         return inputName.name;
       }
