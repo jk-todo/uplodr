@@ -24,28 +24,12 @@ http.createServer(function(req, res) {
     var form = new formidable.IncomingForm();
     form.uploadDir = newUploadDir;
     form.parse(req, function(err, fields, files) {
-      if (typeof files.upload !== 'undefined') {
-        if (files.upload.size !== 0) {
-          // metafile, files.upload, "upload" is the name of the input field
-          var metafile = files.upload.path + '.txt';
-          fs.appendFile(metafile, util.inspect({fields: fields, files: files}), function(err){
-            if (err) throw err;
-          });
-          console.log('uplodr: new %s', metafile);
-          if (files.upload.name.lastIndexOf('.') > 0) {
-            var parts = files.upload.name.split('.');
-            var extension = parts.pop();
-            if (String(extension).length > 0) { 
-              var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') + '.' + extension;
-            } else {
-              var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'');
-            }
-            fs.rename(files.upload.path, safename, function(err){
-              if (err) throw err;
-            });
-          }
-        }
-      }
+      var metadata = util.inspect({fields: fields, files: files});
+      processUpload(files.upload, metadata);
+      processUpload(files.upload2, metadata);
+      processUpload(files.upload3, metadata);
+      processUpload(files.upload4, metadata);
+      processUpload(files.upload5, metadata);
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload.\n\n');
@@ -61,6 +45,10 @@ http.createServer(function(req, res) {
     '<form action="/upload" enctype="multipart/form-data" method="post">'+
     '<input type="text" name="title"><br>'+
     '<input type="file" name="upload"><br>'+
+    '<input type="file" name="upload2"><br>'+
+    '<input type="file" name="upload3"><br>'+
+    '<input type="file" name="upload4"><br>'+
+    '<input type="file" name="upload5"><br>'+
     '<input type="submit" value="Upload">'+
     '</form>'
   );
@@ -91,4 +79,33 @@ function randomCharacters (count, characters) {
     result[i] = characters[randomByte[i] % characters.length]
   };
   return result.join('');
+}
+
+function processUpload(inputName, metadata) {
+  if (typeof inputName !== 'undefined') {
+    if (inputName.size !== 0) {
+      // metafile, files.upload, "upload" is the name of the input field
+      var metafile = inputName.path + '.txt';
+      fs.appendFile(metafile, metadata, function(err){
+        if (err) throw err;
+      });
+      console.log('uplodr: new %s', metafile);
+      if (inputName.name.lastIndexOf('.') > 0) {
+        var parts = inputName.name.split('.');
+        var extension = parts.pop();
+        var newUploadDir = inputName.name.split('/');
+        newUploadDir.pop();
+        if (String(extension).length > 0) { 
+          var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'') + '.' + extension;
+        } else {
+          var safename = newUploadDir + '/' + parts.join().match(/[a-zA-Z0-9]+/g).join().replace(/,/g,'');
+        }
+        fs.rename(inputName.path, safename, function(err){
+          if (err) throw err;
+        });
+      }
+      return true;
+    }
+  }
+  return false;
 }
