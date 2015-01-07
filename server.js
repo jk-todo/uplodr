@@ -49,11 +49,16 @@ http.createServer(function(req, res) {
       successList.push(processUpload(files.upload3));
       successList.push(processUpload(files.upload4));
       successList.push(processUpload(files.upload5));
+      for (var i = 0; i < successList.length; i++) {
+        if (successList[i].length < 1) {
+          successList.splice(i, 1);
+        }
+      }
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload:\n\n');
       // res.end(util.inspect({fields: fields, files: files}));
-      res.end(successList.join(',').replace(/,,/g,',').replace(/,$/,''));
+      res.end(successList.join(',');
     });
     return;
   }
