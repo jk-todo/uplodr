@@ -43,22 +43,24 @@ http.createServer(function(req, res) {
       );
       console.log('uplodr: new %s', metafile);
       // files.upload, "upload" is the name of the input field
+      var originalList = new Array();
+      originalList.push(processUpload(files.upload));
+      originalList.push(processUpload(files.upload2));
+      originalList.push(processUpload(files.upload3));
+      originalList.push(processUpload(files.upload4));
+      originalList.push(processUpload(files.upload5));
       var successList = new Array();
-      successList.push(processUpload(files.upload));
-      successList.push(processUpload(files.upload2));
-      successList.push(processUpload(files.upload3));
-      successList.push(processUpload(files.upload4));
-      successList.push(processUpload(files.upload5));
-      for (var i = 0; i < successList.length; i++) {
-        if (successList[i].length < 1) {
-          successList.splice(i, 1);
+      for (var i = 0; i < originalList.length; i++) {
+        if (originalList[i].length > 0) {
+          successList.push(originalList[i]);
+          // console.log(originalList[i]);
         }
       }
       // response to browser
       res.writeHead(200, {'content-type': 'text/plain'});
       res.write('received upload:\n\n');
       // res.end(util.inspect({fields: fields, files: files}));
-      res.end(successList.join(','));
+      res.end(successList.join());
     });
     return;
   }
